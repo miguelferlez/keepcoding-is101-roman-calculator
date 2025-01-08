@@ -1,19 +1,15 @@
 import tkinter as tk
-from app.views.view import CalcButton, KeyBoard
+from app.views.view import Calculator
 
 def get_click(btn_text:str):
-    print(btn_text)
+    calc.display.show(btn_text)
 
 root = tk.Tk()
+root.title('roman calculator')
 root.pack_propagate(True)
+root.config(padx=10, pady=10)
 
-# btn1 = CalcButton(root, 'btn1', lambda : print('btn1'))
-# btn1.pack()
-
-# btn2 = CalcButton(root, 'btn2', lambda : print('btn2'))
-# btn2.pack()
-
-kb = KeyBoard(root, get_click)
-kb.pack()
+calc = Calculator(root, get_click)
+calc.pack()
 
 root.mainloop()
