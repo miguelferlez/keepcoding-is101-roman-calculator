@@ -2,7 +2,7 @@ from __future__ import annotations
 from app.models import a_arabigo, a_romano, RomanNumberError
 from typing import Union, Callable
 
-class Roman_Number:
+class RomanNumber:
     def __init__(self, value: Union[str, int]):
         if isinstance(value, int):
             self.representacion = a_romano(value)
@@ -19,7 +19,7 @@ class Roman_Number:
     def __str__(self):
         return self.representacion
     
-    def __operation(self, other: object, func: Callable, inverse: bool = False) -> Roman_Number:
+    def __operation(self, other: object, func: Callable, inverse: bool = False) -> RomanNumber:
         """
         1. Validar el tipo de other
         2. Realizar la operacion
@@ -42,16 +42,16 @@ class Roman_Number:
 
         if isinstance(other, int):
             number_value = other
-        elif isinstance(other, Roman_Number):
+        elif isinstance(other, RomanNumber):
             number_value = other.valor
         else:
-            raise TypeError(f"'{ops.get(func.__name__, func.__name__)}' no permitida entre {Roman_Number.__name__} y {other.__class__.__name__}")
+            raise TypeError(f"'{ops.get(func.__name__, func.__name__)}' no permitida entre {RomanNumber.__name__} y {other.__class__.__name__}")
         
         res = func(self.valor, number_value) if not inverse else func(number_value, self.valor)
 
-        return Roman_Number(res) if type(res) == int else res
+        return RomanNumber(res) if type(res) == int else res
 
-    def __add__(self, other: object) -> Roman_Number:
+    def __add__(self, other: object) -> RomanNumber:
         return self.__operation(other, int.__add__)
     
     def __radd__(self, other: object):

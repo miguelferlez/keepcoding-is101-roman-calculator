@@ -8,14 +8,15 @@ class Status(Enum):
     FINISHED = 4
 
 class Operation(Enum):
-    ADD = (lambda x, y: x + y, )
-    SUB = (lambda x, y: x - y, )
-    MULT = (lambda x, y: x * y, )
-    DIV = (lambda x, y: x / y, )
-    MOD = (lambda x, y: x % y)
+    ADD = (lambda x, y: x + y, '+')
+    SUB = (lambda x, y: x - y, '-')
+    MULT = (lambda x, y: x * y, '*')
+    DIV = (lambda x, y: x / y, '/')
+    MOD = (lambda x, y: x % y, '%')
 
-    def __init__(self, operation):
+    def __init__(self, operation, symbol=None):
         self.op = operation
+        self.symbol = symbol
 
     def calculate(self, x:int, y:int):
         return self.op(x, y)
