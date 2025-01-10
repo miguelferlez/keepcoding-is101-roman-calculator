@@ -18,7 +18,7 @@ class App(tk.Tk):
     def handle_click(self, button_text:str):
         if button_text in self.calc.keyboard.btn_types[ButtonTypes.DIGITS]:
             try:
-                #first roman number
+                #click first roman number
                 if self.calculate.status == Status.EMPTY:
                     self.calculate.x = RomanNumber(button_text)
                     self.calc.display.show(self.calculate.x)
@@ -26,7 +26,7 @@ class App(tk.Tk):
                     roman_number = f'{self.calculate.x}{button_text}'
                     self.calculate.x = RomanNumber(roman_number)
                     self.calc.display.show(self.calculate.x)
-                #second roman number
+                #click second roman number
                 elif self.calculate.status == Status.PENDING:
                     self.calculate.y = RomanNumber(button_text)
                     self.calc.display.show(self.calculate.y)
@@ -36,19 +36,29 @@ class App(tk.Tk):
                     self.calc.display.show(self.calculate.y)
             except RomanNumberError:
                 pass
+        #click operation
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.OPERATIONS]:
             if self.calculate.status == Status.PARTIAL:
                 self.calculate.operation = self.get_operation(button_text)
-                self.calc.display.show('')
+        #click equal
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.EQUAL]:
+            operation_result = None
             if self.calculate.status == Status.COMPLETE:
-                self.calc.display.show(self.calculate.result)
+                if self.calculate.operation == Operation.SUB and self.calculate.x < self.calculate.y:
+                    operation_result = None
+                    self.calc.display.show('ERROR')
+                elif self.calculate.operation == Operation.DIV and self.calculate.result < 1:
+                    operation_result = None
+                    self.calc.display.show('ERROR')
+                else:
+                    operation_result = self.calculate.result
+                    self.calc.display.show(operation_result)
+            self.calculate = Calculate()
+            self.calculate.x = operation_result
+        #click reset
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.RESET]:
             self.calc.display.show('')
             self.calculate = Calculate()
-            print(self.calculate.x, self.calculate.operation, self.calculate.y)
-        # TODO dónde controlo errores si el resultado es negativo, nulo o hay división entre 0??
-        # TODO cómo concateno el resultado de una operación con otra??
 
     def get_operation(self, symbol:str):
         for op in Operation:

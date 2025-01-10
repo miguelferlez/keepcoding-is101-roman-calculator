@@ -11,7 +11,7 @@ class Operation(Enum):
     ADD = (lambda x, y: x + y, '+')
     SUB = (lambda x, y: x - y, '-')
     MULT = (lambda x, y: x * y, '*')
-    DIV = (lambda x, y: x / y, '/')
+    DIV = (lambda x, y: x // y, '/')
     MOD = (lambda x, y: x % y, '%')
 
     def __init__(self, operation, symbol=None):
