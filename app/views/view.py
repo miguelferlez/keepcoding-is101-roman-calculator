@@ -78,6 +78,8 @@ class Record(tk.Frame):
         rec_lb.pack(side=tk.LEFT)
         rec_clear_btn = tk.Button(header_container, text='clear', command=self.reset)
         rec_clear_btn.pack(side=tk.RIGHT)
+        rec_save_btn = tk.Button(header_container, text='save ', command=self.save)
+        rec_save_btn.pack(side=tk.RIGHT)
 
         txt_container = tk.Frame(self)
         txt_container.pack(side=tk.BOTTOM, expand=True, fill=tk.BOTH)
@@ -88,6 +90,26 @@ class Record(tk.Frame):
     def reset(self):
         self.txt.config(state=tk.NORMAL)
         self.txt.delete('1.0', tk.END)
+        self.txt.config(state=tk.DISABLED)
+        log = open('log.txt', 'w')
+        log.write('')
+        log.close()
+
+    def save(self):
+        output = self.txt.get('1.0',tk.END)
+        if output.endswith('\n'):
+            output = output[:-1]
+        log = open('log.txt', 'w')
+        log.writelines(output)
+        log.close()
+
+    def read(self):
+        self.txt.config(state=tk.NORMAL)
+        log = open('log.txt', 'r')
+        lines = log.readlines()
+        log.close()
+        for line in lines:
+            self.txt.insert(tk.END, line)
         self.txt.config(state=tk.DISABLED)
 
 class Calculator(tk.Frame):

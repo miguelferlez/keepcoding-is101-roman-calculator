@@ -15,7 +15,10 @@ class App(tk.Tk):
         self.rec = Record(self)
         self.rec.grid(row=0, column=1)
 
+        self.rec.read()
         self.calculate = Calculate()
+
+        line = 1
 
     def handle_click(self, button_text:str):
         if button_text in self.calc.keyboard.btn_types[ButtonTypes.DIGITS]:
@@ -54,6 +57,7 @@ class App(tk.Tk):
                     operation_output = f'{self.calculate.x} {self.calculate.operation.symbol} {self.calculate.y} {button_text} {operation_result}'
                     self.calc.display.show(operation_result)
                     self.set_operation(operation_output)
+                    # self.rec.save()
             self.calculate = Calculate()
             self.calculate.x = operation_result
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.RESET]:
