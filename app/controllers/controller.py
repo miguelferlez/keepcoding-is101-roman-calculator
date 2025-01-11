@@ -1,5 +1,5 @@
 import tkinter as tk
-from app.views.view import Calculator, ButtonTypes
+from app.views.view import Calculator, ButtonTypes, Record
 from app.models.calculate import Calculate, Status, Operation
 from app.models.roman_number import RomanNumber, RomanNumberError
 
@@ -8,10 +8,12 @@ class App(tk.Tk):
         super().__init__()
         self.title('roman calculator')
         self.pack_propagate(True)
-        self.config(padx=10, pady=10)
+        self.config(padx=5, pady=5)
 
         self.calc = Calculator(self, self.handle_click)
-        self.calc.pack()
+        self.calc.grid(row=0, column=0)
+        self.rec = Record(self)
+        self.rec.grid(row=0, column=1)
 
         self.calculate = Calculate()
 
