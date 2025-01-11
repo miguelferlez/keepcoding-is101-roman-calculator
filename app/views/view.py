@@ -68,9 +68,8 @@ class Display(tk.Frame):
         self.lb.config(text=value)
 
 class Record(tk.Frame):
-    def __init__(self, parent:object, text:str=''):
+    def __init__(self, parent:object):
         super().__init__(parent, width=3*BUTTON_WIDTH, height=6*BUTTON_HEIGHT, padx=5)
-        self.text = text
 
         self.pack_propagate(False)
         header_container = tk.Frame(self)
@@ -83,11 +82,13 @@ class Record(tk.Frame):
         txt_container = tk.Frame(self)
         txt_container.pack(side=tk.BOTTOM, expand=True, fill=tk.BOTH)
         txt_container.pack_propagate(False)
-        self.txt = tk.Text(txt_container)
+        self.txt = tk.Text(txt_container, state=tk.DISABLED)
         self.txt.pack(side=tk.TOP)
 
     def reset(self):
+        self.txt.config(state=tk.NORMAL)
         self.txt.delete('1.0', tk.END)
+        self.txt.config(state=tk.DISABLED)
 
 class Calculator(tk.Frame):
     def __init__(self, parent:object, command:Callable):

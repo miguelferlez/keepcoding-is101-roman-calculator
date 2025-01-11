@@ -20,7 +20,6 @@ class App(tk.Tk):
     def handle_click(self, button_text:str):
         if button_text in self.calc.keyboard.btn_types[ButtonTypes.DIGITS]:
             try:
-                #click first roman number
                 if self.calculate.status == Status.EMPTY:
                     self.calculate.x = RomanNumber(button_text)
                     self.calc.display.show(self.calculate.x)
@@ -28,7 +27,6 @@ class App(tk.Tk):
                     roman_number = f'{self.calculate.x}{button_text}'
                     self.calculate.x = RomanNumber(roman_number)
                     self.calc.display.show(self.calculate.x)
-                #click second roman number
                 elif self.calculate.status == Status.PENDING:
                     self.calculate.y = RomanNumber(button_text)
                     self.calc.display.show(self.calculate.y)
@@ -38,11 +36,9 @@ class App(tk.Tk):
                     self.calc.display.show(self.calculate.y)
             except RomanNumberError:
                 pass
-        #click operation
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.OPERATIONS]:
             if self.calculate.status == Status.PARTIAL:
-                self.calculate.operation = self.get_operation(button_text)
-        #click equal
+                self.calculate.operation = self.get_operation_by_symbol(button_text)
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.EQUAL]:
             operation_result = None
             operation_output = ''
@@ -57,19 +53,23 @@ class App(tk.Tk):
                     operation_result = self.calculate.result
                     operation_output = f'{self.calculate.x} {self.calculate.operation.symbol} {self.calculate.y} {button_text} {operation_result}'
                     self.calc.display.show(operation_result)
-                    self.rec.txt.insert('end', operation_output + '\n')
+                    self.set_operation(operation_output)
             self.calculate = Calculate()
             self.calculate.x = operation_result
-        #click reset
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.RESET]:
             self.calc.display.show('')
             self.calculate = Calculate()
 
-    def get_operation(self, symbol:str):
+    def get_operation_by_symbol(self, symbol:str):
         for op in Operation:
             if op.value[1] == symbol:
                 return op
         return None
     
+    def set_operation(self, output:str):
+        self.rec.txt.config(state=tk.NORMAL)
+        self.rec.txt.insert('end', output + '\n')
+        self.rec.txt.config(state=tk.DISABLED)
+
     def run(self):
         self.mainloop()
