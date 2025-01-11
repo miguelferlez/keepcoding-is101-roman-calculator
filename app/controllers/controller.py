@@ -45,6 +45,7 @@ class App(tk.Tk):
         #click equal
         elif button_text in self.calc.keyboard.btn_types[ButtonTypes.EQUAL]:
             operation_result = None
+            operation_output = ''
             if self.calculate.status == Status.COMPLETE:
                 if self.calculate.operation == Operation.SUB and self.calculate.x < self.calculate.y:
                     operation_result = None
@@ -54,7 +55,9 @@ class App(tk.Tk):
                     self.calc.display.show('ERROR')
                 else:
                     operation_result = self.calculate.result
+                    operation_output = f'{self.calculate.x} {self.calculate.operation.symbol} {self.calculate.y} {button_text} {operation_result}'
                     self.calc.display.show(operation_result)
+                    self.rec.txt.insert('end', operation_output + '\n')
             self.calculate = Calculate()
             self.calculate.x = operation_result
         #click reset
