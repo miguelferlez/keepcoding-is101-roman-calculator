@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter.font import Font
 from typing import Callable
 from enum import Enum
+from app.models.calculate import Operation
+from app.models.roman_number import RomanNumber
 
 BUTTON_WIDTH = 90
 BUTTON_HEIGHT = 50
@@ -78,8 +80,6 @@ class Record(tk.Frame):
         rec_lb.pack(side=tk.LEFT)
         rec_clear_btn = tk.Button(header_container, text='clear', command=self.reset)
         rec_clear_btn.pack(side=tk.RIGHT)
-        rec_save_btn = tk.Button(header_container, text='save ', command=self.save)
-        rec_save_btn.pack(side=tk.RIGHT)
 
         txt_container = tk.Frame(self)
         txt_container.pack(side=tk.BOTTOM, expand=True, fill=tk.BOTH)
@@ -95,21 +95,19 @@ class Record(tk.Frame):
         log.write('')
         log.close()
 
-    def save(self):
-        output = self.txt.get('1.0',tk.END)
-        if output.endswith('\n'):
-            output = output[:-1]
-        log = open('log.txt', 'w')
-        log.writelines(output)
-        log.close()
-
-    def read(self):
+    def read_record(self):
         self.txt.config(state=tk.NORMAL)
         log = open('log.txt', 'r')
         lines = log.readlines()
         log.close()
         for line in lines:
-            self.txt.insert(tk.END, line)
+            clean_line = line.strip()
+            operation_log = clean_line.split(';')
+            x = RomanNumber(operation_log[0])
+            y = RomanNumber(operation_log[1])
+            op = getattr(Operation, operation_log[2])
+            operation_txt = f'{x} {op.symbol} {y} = {op.calculate(x, y)}'
+            self.txt.insert(tk.END, operation_txt + '\n')
         self.txt.config(state=tk.DISABLED)
 
 class Calculator(tk.Frame):
